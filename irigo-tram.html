@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Tram B">
+  <meta name="theme-color" content="#00101f">
+  <title>Tram B · Irigo Angers</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #00101f;
+      --panel: #001828;
+      --panel2: #002035;
+      --border: #003355;
+      --blue: #00569D;
+      --blue-light: #1a90e8;
+      --blue-glow: #0af;
+      --amber: #ffb300;
+      --green: #00e676;
+      --orange: #ff6d00;
+      --text: #e0f0ff;
+      --muted: #4a7a9b;
+      --mono: 'Share Tech Mono', monospace;
+      --display: 'Barlow Condensed', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      font-family: var(--display);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100dvh;
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-bottom: env(safe-area-inset-bottom, 16px);
+      overflow-x: hidden;
+      background-image:
+        radial-gradient(ellipse 80% 50% at 50% -20%, #001e3c, transparent),
+        repeating-linear-gradient(0deg, transparent, transparent 39px, #ffffff04 39px, #ffffff04 40px),
+        repeating-linear-gradient(90deg, transparent, transparent 39px, #ffffff03 39px, #ffffff03 40px);
+    }
+
+    header {
+      padding: 16px 16px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(0,16,31,0.92);
+      backdrop-filter: blur(16px);
+    }
+
+    .logo-wrap { display: flex; align-items: center; gap: 10px; }
+
+    .tram-badge {
+      background: var(--blue);
+      color: white;
+      font-family: var(--display);
+      font-weight: 800;
+      font-size: 22px;
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 16px #00569d66;
+    }
+
+    .header-text h1 {
+      font-family: var(--display);
+      font-size: 17px; font-weight: 800;
+      letter-spacing: 0.5px; text-transform: uppercase;
+      color: var(--text); line-height: 1;
+    }
+    .header-text p {
+      font-family: var(--mono);
+      font-size: 10px; color: var(--muted); margin-top: 2px;
+    }
+
+    .header-right { display: flex; align-items: center; gap: 8px; }
+
+    .live-dot {
+      display: flex; align-items: center; gap: 5px;
+      font-family: var(--mono); font-size: 10px; color: var(--green);
+      background: #00e67615; border: 1px solid #00e67630;
+      padding: 4px 8px; border-radius: 20px;
+    }
+    .live-dot::before {
+      content: '';
+      width: 6px; height: 6px; border-radius: 50%;
+      background: currentColor;
+      animation: blink 1.5s ease infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+    .refresh-btn {
+      width: 34px; height: 34px;
+      background: var(--panel2); border: 1px solid var(--border);
+      color: var(--text); border-radius: 8px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; transition: all 0.15s;
+    }
+    .refresh-btn:active { transform: scale(0.9); }
+    .refresh-btn.spin { animation: spinonce 0.6s linear; }
+    @keyframes spinonce { to { transform: rotate(360deg); } }
+
+    main {
+      padding: 14px;
+      display: flex; flex-direction: column; gap: 14px;
+      max-width: 480px; margin: 0 auto;
+    }
+
+    .stop-section {
+      border: 1px solid var(--border);
+      border-radius: 14px; overflow: hidden;
+      background: var(--panel);
+      animation: fadeUp 0.4s ease both;
+    }
+    .stop-section:nth-child(2) { animation-delay: 0.08s; }
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(10px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+
+    .stop-header {
+      padding: 12px 14px;
+      background: linear-gradient(135deg, var(--panel2), var(--panel));
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 10px;
+    }
+
+    .stop-icon {
+      font-size: 20px; width: 36px; height: 36px;
+      background: #00569d22; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .stop-title { flex: 1; min-width: 0; }
+    .stop-name {
+      font-family: var(--display); font-size: 18px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.5px; line-height: 1;
+    }
+    .stop-dir {
+      font-family: var(--mono); font-size: 10px;
+      color: var(--blue-light); margin-top: 3px;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+
+    .line-tag {
+      font-family: var(--display); font-weight: 800; font-size: 14px;
+      background: var(--blue); color: white;
+      padding: 3px 10px; border-radius: 6px;
+      letter-spacing: 0.5px; flex-shrink: 0;
+      box-shadow: 0 0 10px #00569d44;
+    }
+
+    .rows { padding: 2px 0; }
+
+    .row {
+      display: grid;
+      grid-template-columns: 64px 1fr 6px;
+      align-items: center; gap: 10px;
+      padding: 10px 14px;
+      border-bottom: 1px solid #ffffff08;
+      transition: background 0.12s;
+    }
+    .row:last-child { border-bottom: none; }
+    .row:active { background: var(--panel2); }
+
+    .time-block { text-align: center; }
+    .time-mins {
+      font-family: var(--mono); font-size: 28px; line-height: 1;
+    }
+    .time-mins.now  { color: var(--orange); }
+    .time-mins.soon { color: var(--amber); }
+    .time-mins.later{ color: var(--blue-glow); }
+    .time-label {
+      font-family: var(--mono); font-size: 9px;
+      color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px;
+    }
+
+    .dest-name {
+      font-family: var(--display); font-size: 15px; font-weight: 600;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .dest-time {
+      font-family: var(--mono); font-size: 10px;
+      color: var(--muted); margin-top: 2px;
+    }
+
+    .bar-indicator {
+      width: 4px; height: 36px;
+      background: var(--border); border-radius: 2px;
+      overflow: hidden; align-self: center;
+    }
+    .bar-fill {
+      width: 100%; border-radius: 2px;
+      transition: height 0.5s ease;
+    }
+    .bar-fill.now  { background: var(--orange); }
+    .bar-fill.soon { background: var(--amber); }
+    .bar-fill.later{ background: var(--blue-glow); }
+
+    .loading, .error, .empty {
+      padding: 30px 16px; text-align: center;
+      font-family: var(--mono); font-size: 12px;
+    }
+    .loading { color: var(--blue-light); animation: fadepulse 1s ease infinite; }
+    .error   { color: var(--orange); }
+    .empty   { color: var(--muted); }
+    @keyframes fadepulse { 0%,100%{opacity:0.4} 50%{opacity:1} }
+
+    .update-bar {
+      font-family: var(--mono); font-size: 10px;
+      color: var(--muted); text-align: center;
+      padding: 4px 0 8px; letter-spacing: 0.5px;
+    }
+
+    .install-tip {
+      background: var(--panel); border: 1px solid var(--border);
+      border-radius: 12px; padding: 12px 14px;
+      font-family: var(--mono); font-size: 11px;
+      color: var(--muted); line-height: 1.7;
+    }
+    .install-tip strong {
+      color: var(--blue-light); display: block; margin-bottom: 4px;
+      font-family: var(--display); font-size: 13px;
+      font-weight: 700; text-transform: uppercase;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo-wrap">
+    <div class="tram-badge">B</div>
+    <div class="header-text">
+      <h1>Tram Irigo</h1>
+      <p>ANGERS · LIGNE B</p>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="live-dot" id="liveDot">LIVE</div>
+    <button class="refresh-btn" id="refreshBtn" aria-label="Actualiser">↻</button>
+  </div>
+</header>
+
+<main id="main"></main>
+
+<script>
+const WORKER = "https://irigo-proxy.marius-lanceleur.workers.dev/";
+
+const STOPS = [
+  { key: "europe",      icon: "🏙️", name: "Europe",      dir: "→ Belle-Beille Campus" },
+  { key: "bellebeille", icon: "🌿", name: "Belle-Beille", dir: "→ Monplaisir" }
+];
+
+let state = {
+  europe:      { loading: true, error: null, rows: [] },
+  bellebeille: { loading: true, error: null, rows: [] },
+  updated: null
+};
+
+function minsClass(m) { return m <= 2 ? "now" : m <= 8 ? "soon" : "later"; }
+function barPct(m)    { return Math.max(5, Math.min(100, 100 - (m / 30) * 100)); }
+function fmtTime(t)   { return t ? t.slice(0,5) : ""; }
+
+function renderRows(rows) {
+  if (!rows || !rows.length)
+    return `<div class="empty">Aucun passage prévu.</div>`;
+  return rows.map(r => {
+    const cls  = minsClass(r.mins);
+    const pct  = barPct(r.mins);
+    const disp = r.mins <= 1 ? "&lt;1" : r.mins;
+    const unit = r.mins <= 1 ? "arr." : "min";
+    return `
+      <div class="row">
+        <div class="time-block">
+          <div class="time-mins ${cls}">${disp}</div>
+          <div class="time-label">${unit}</div>
+        </div>
+        <div>
+          <div class="dest-name">${r.d}</div>
+          <div class="dest-time">${fmtTime(r.t)}</div>
+        </div>
+        <div class="bar-indicator">
+          <div class="bar-fill ${cls}" style="height:${pct}%"></div>
+        </div>
+      </div>`;
+  }).join("");
+}
+
+function render() {
+  let html = "";
+  for (const stop of STOPS) {
+    const s = state[stop.key];
+    const content = s.loading
+      ? `<div class="loading">Chargement…</div>`
+      : s.error
+        ? `<div class="error">⚠ ${s.error}</div>`
+        : `<div class="rows">${renderRows(s.rows)}</div>`;
+    html += `
+      <div class="stop-section">
+        <div class="stop-header">
+          <div class="stop-icon">${stop.icon}</div>
+          <div class="stop-title">
+            <div class="stop-name">${stop.name}</div>
+            <div class="stop-dir">${stop.dir}</div>
+          </div>
+          <div class="line-tag">Tram B</div>
+        </div>
+        ${content}
+      </div>`;
+  }
+
+  if (state.updated) {
+    const t = new Date(state.updated).toLocaleTimeString("fr-FR",
+      { hour:"2-digit", minute:"2-digit", second:"2-digit" });
+    html += `<div class="update-bar">Mis à jour à ${t}</div>`;
+  }
+
+  const standalone = window.navigator.standalone
+    || window.matchMedia("(display-mode: standalone)").matches;
+  if (!standalone) {
+    html += `<div class="install-tip">
+      <strong>📱 Ajouter à l'écran d'accueil</strong>
+      Dans Safari : appuie sur ⎙ Partager → "Sur l'écran d'accueil"
+    </div>`;
+  }
+
+  document.getElementById("main").innerHTML = html;
+}
+
+async function fetchData() {
+  state.europe.loading = true;
+  state.bellebeille.loading = true;
+  render();
+  try {
+    const resp = await fetch(WORKER, { signal: AbortSignal.timeout(20000) });
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const data = await resp.json();
+    state.europe      = { loading: false, error: null, rows: data.europe || [] };
+    state.bellebeille = { loading: false, error: null, rows: data.bellebeille || [] };
+    state.updated     = data.updated;
+    document.getElementById("liveDot").style.cssText = "color:var(--green)";
+  } catch(e) {
+    state.europe      = { loading: false, error: "Connexion impossible", rows: [] };
+    state.bellebeille = { loading: false, error: "Connexion impossible", rows: [] };
+    document.getElementById("liveDot").style.cssText = "color:var(--orange)";
+  }
+  render();
+}
+
+document.getElementById("refreshBtn").addEventListener("click", () => {
+  const btn = document.getElementById("refreshBtn");
+  btn.classList.remove("spin");
+  void btn.offsetWidth;
+  btn.classList.add("spin");
+  fetchData();
+});
+
+fetchData();
+setInterval(fetchData, 30000);
+document.addEventListener("visibilitychange", () => { if (!document.hidden) fetchData(); });
+</script>
+</body>
+</html>
